@@ -88,11 +88,11 @@ def dihedral_angle(atom1, atom2, atom3, atom4, coordinates):
         dihedral_angle = -dihedral_angle
     return math.degrees(dihedral_angle)
 
-print("Hello!")
-file_path = input("Enter the file path: ").strip()
+print("Hello! Here is a tool to find and compare the bond lengths, bond angles and dihedral angles of any molecule..")
+file_path = input("Enter the file path (.log): ").strip()
 if not os.path.exists(file_path):
     print("ERROR IN INPUT! PLEASE ENTER A VALID FILE PATH..")
-    file_path = input("Enter the file path: ").strip()
+    file_path = input("Enter the file path (.log): ").strip()
 coordinates = extract_coordinates(file_path)
 print(f"Coordinates of the conformer: {coordinates}")
 convert_to_xyz(file_path, coordinates)
@@ -101,9 +101,9 @@ connectivity = extract_connectivity(pdb_file)
 print(f"Connectivity of the conformer: {connectivity}")
 answer = int(input("Enter 1 to continue and find the properties or 0 to exit: "))
 while answer == 1:
-    property = int(input("Enter 1 for finding bond length, 2 for bond angle, 3 for dihedral angle and 4 to compare between two conformers: "))
-    if property == 1: #bond length
-        atom1, atom2 = int(input("Enter the first atom: ")), int(input("Enter the second atom: "))
+    property = input("Enter the atoms with space between them or enter 4 to compare between conformers: ")
+    if len(property.split()) == 2: #bond length
+        atom1, atom2 = int(property.split()[0]), int(property.split()[1])
         if atom1 > len(coordinates) or atom2 > len(coordinates) or len(set([atom1, atom2])) != 2:
             print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
         elif check_length_connectivity(str(atom1), str(atom2), connectivity):
@@ -111,8 +111,8 @@ while answer == 1:
             print(f"The bond length between {coordinates[atom1 - 1][0]}[{atom1}] and {coordinates[atom2 - 1][0]}[{atom2}] is {round(bl, 2)}Å.")
         else:
             print(f"{coordinates[atom1 - 1][0]}[{atom1}] and {coordinates[atom2 - 2][0]}[{atom2}] are not connected.")
-    elif property == 2: #bond angle
-        atom1, atom2, atom3 = int(input("Enter the first atom: ")), int(input("Enter the second atom: ")), int(input("Enter the third atom: "))
+    elif len(property.split()) == 3: #bond angle
+        atom1, atom2, atom3 = int(property.split()[0]), int(property.split()[1]), int(property.split()[2])
         if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or len(set([atom1, atom2, atom3])) != 3:
             print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
         elif check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity):
@@ -120,30 +120,30 @@ while answer == 1:
             print(f"The bond angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}] and {coordinates[atom3 - 1][0]}[{atom3}] is {round(ba, 1)}°.")
         else:
             print(f"{coordinates[atom1 - 1][0]}[{atom1}] or/and {coordinates[atom3 - 1][0]}[{atom2}] is/are not connected to {coordinates[atom2 - 1][0]}[{atom3}].")
-    elif property == 3: #dihedral angle
-        atom1, atom2, atom3, atom4 = int(input("Enter the first atom: ")), int(input("Enter the second atom: ")), int(input("Enter the third atom: ")), int(input("Enter the fourth atom: "))
+    elif len(property.split()) == 4: #dihedral angle
+        atom1, atom2, atom3, atom4 = int(property.split()[0]), int(property.split()[1]), int(property.split()[2]), int(property.split()[3])
         if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates) or len(set([atom1, atom2, atom3, atom4])) != 4:
             print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
         else: 
             da = dihedral_angle(atom1, atom2, atom3, atom4, coordinates)
             print(f"The dihedral angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}], {coordinates[atom3 - 1][0]}[{atom3}] and {coordinates[atom4 - 1][0]}[{atom4}] is {round(da)}°.")
-    elif property == 4: #comparison
-        file_path2 = input("Enter the file path: ").strip()
+    elif property == "4": #comparison
+        file_path2 = input("Enter the file path (.log): ").strip()
         if not os.path.exists(file_path2):
             print("ERROR IN INPUT! PLEASE ENTER A VALID FILE PATH..")
-            file_path2 = input("Enter the file path: ").strip()
-        elif file_path == file_path2:
+            file_path2 = input("Enter the file path (.log): ").strip()
+        if file_path == file_path2:
             print("YOU ENTERED THE SAME FILE PATH AS BEFORE!! PLEASE TRY AGAIN TO COMPARE..")
-            file_path2 = input("Enter the file path: ").strip()
+            file_path2 = input("Enter the file path (.log): ").strip()
         coordinates2 = extract_coordinates(file_path2)
-        print(f"COORDINATES OF THE CONFORMER: {coordinates2}")
+        print(f"Coordinates of the conformer: {coordinates2}")
         convert_to_xyz(file_path2, coordinates2)
         pdb_file2 = file_path2.replace(".log", ".pdb")
         connectivity2 = extract_connectivity(pdb_file2)
-        print(f"CONNECTIVITY DATA OF THE CONFORMER: {connectivity2}")
-        property2 = int(input("Enter 1 for finding bond length, 2 for bond angle and 3 for dihedral angle: "))
-        if property2 == 1: #compare bond length
-            atom1, atom2 = int(input("Enter the first atom: ")), int(input("Enter the second atom: "))
+        print(f"Connectivity data of the conformer: {connectivity2}")
+        property2 = input("Enter the atoms with space between them: ")
+        if len(property2.split()) == 2: #compare bond length
+            atom1, atom2 = int(property2.split()[0]), int(property2.split()[1])
             if atom1 > len(coordinates) or atom2 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates2) or len(set([atom1, atom2])) !=2:
                 print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
             elif check_length_connectivity(str(atom1), str(atom2), connectivity) and check_length_connectivity(str(atom1), str(atom2), connectivity2):
@@ -154,8 +154,8 @@ while answer == 1:
                 print(f"Difference in bond length between the two conformers = {round(abs(bl - bl2), 2)}Å")
             else:
                 print(f"{coordinates2[atom1 - 1][0]}[{atom1}] and {coordinates2[atom2 - 2][0]}[{atom2}] are not connected in one or both of the conformers.")
-        elif property2 == 2: #compare bond angle
-            atom1, atom2, atom3 = int(input("Enter the first atom: ")), int(input("Enter the second atom: ")), int(input("Enter the third atom: "))
+        elif len(property2.split()) == 3: #compare bond angle
+            atom1, atom2, atom3 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2])
             if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates2) or atom3 > len(coordinates2) or len(set([atom1, atom2, atom3])) != 3:
                 print(f"ERROR IN INPUT! Atom {atom1} or atom {atom2} or atom {atom3} or a few of them not in one or both of the conformer. PLEASE TRY AGAIN..")
             elif check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity) and check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity2):
@@ -166,8 +166,8 @@ while answer == 1:
                 print(f"Difference in bond angle between the two conformers = {round(abs(ba - ba2), 1)}°")
             else:
                 print(f"{coordinates2[atom1 - 1][0]}[{atom1}] and {coordinates2[atom3 - 1][0]}[{atom2}] are not connected to {coordinates2[atom2 - 1][0]}[{atom3}] in one or both of the conformers.")
-        elif property2 == 3: #compare dihedral angle
-            atom1, atom2, atom3, atom4 = int(input("Enter the first atom: ")), int(input("Enter the second atom: ")), int(input("Enter the third atom: ")), int(input("Enter the fourth atom: "))
+        elif len(property2.split()) == 4: #compare dihedral angle
+            atom1, atom2, atom3, atom4 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2]), int(property2.split()[3])
             if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates2) or len(set([atom1, atom2, atom3, atom4])) !=4:
                 print(f"ERROR IN INPUT! Atom {atom1} or atom {atom2} or atom {atom3} or atom {atom4} or a few of them not in one or both of the conformer. PLEASE TRY AGAIN..")
             else: 
