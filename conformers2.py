@@ -141,40 +141,40 @@ while answer == 1:
         pdb_file2 = file_path2.replace(".log", ".pdb")
         connectivity2 = extract_connectivity(pdb_file2)
         print(f"Connectivity data of the conformer: {connectivity2}")
-        property2 = input("Enter the atoms with space between them: ")
-        if len(property2.split()) == 2: #compare bond length
-            atom1, atom2 = int(property2.split()[0]), int(property2.split()[1])
-            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates2) or len(set([atom1, atom2])) !=2:
-                print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
-            elif check_length_connectivity(str(atom1), str(atom2), connectivity) and check_length_connectivity(str(atom1), str(atom2), connectivity2):
+        property2, property3 = input("Enter the atoms with space between them (for conformer 1): "), input("Enter the atoms with space between them (for conformer 2): ")
+        if len(property2.split()) == 2 and len(property3.split()) == 2: #compare bond length
+            atom1, atom2, atom3, atom4 = int(property2.split()[0]), int(property2.split()[1]), int(property3.split()[0]), int(property3.split()[1])
+            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates2) or atom4 > len(coordinates2) or len(set([atom1, atom2])) !=2 or len(set([atom3, atom4])) != 2:
+                print("ERROR IN INPUT! PLEASE TRY AGAIN..")
+            elif check_length_connectivity(str(atom1), str(atom2), connectivity) and check_length_connectivity(str(atom3), str(atom4), connectivity2):
                 bl = bond_length(atom1, atom2, coordinates)
-                bl2 = bond_length(atom1, atom2, coordinates2)
+                bl2 = bond_length(atom3, atom4, coordinates2)
                 print(f"The bond length between {coordinates[atom1 - 1][0]}[{atom1}] and {coordinates[atom2 - 1][0]}[{atom2}] of conformer 1 is {round(bl, 2)}Å.")
-                print(f"The bond length between {coordinates2[atom1 - 1][0]}[{atom1}] and {coordinates2[atom2 - 1][0]}[{atom2}] of conformer 2 is {round(bl2, 2)}Å.")
+                print(f"The bond length between {coordinates2[atom3 - 1][0]}[{atom3}] and {coordinates2[atom4 - 1][0]}[{atom4}] of conformer 2 is {round(bl2, 2)}Å.")
                 print(f"Difference in bond length between the two conformers = {round(abs(bl - bl2), 2)}Å")
             else:
-                print(f"{coordinates2[atom1 - 1][0]}[{atom1}] and {coordinates2[atom2 - 2][0]}[{atom2}] are not connected in one or both of the conformers.")
-        elif len(property2.split()) == 3: #compare bond angle
-            atom1, atom2, atom3 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2])
-            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates2) or atom3 > len(coordinates2) or len(set([atom1, atom2, atom3])) != 3:
-                print(f"ERROR IN INPUT! Atom {atom1} or atom {atom2} or atom {atom3} or a few of them not in one or both of the conformer. PLEASE TRY AGAIN..")
-            elif check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity) and check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity2):
+                print("The atoms are not connected in one or both of the conformers.")
+        elif len(property2.split()) == 3 and len(property3.split()) == 3: #compare bond angle
+            atom1, atom2, atom3, atom4, atom5, atom6 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2]), int(property3.split()[0]), int(property3.split()[1]), int(property3.split()[2])
+            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates2) or atom5 > len(coordinates2) or atom6 > len(coordinates2) or len(set([atom1, atom2, atom3])) != 3 or len(set([atom4, atom5, atom6])) != 3:
+                print("ERROR IN INPUT! PLEASE TRY AGAIN..")
+            elif check_angle_connectivity(str(atom2), str(atom1), str(atom3), connectivity) and check_angle_connectivity(str(atom5), str(atom4), str(atom6), connectivity2):
                 ba = bond_angle(atom2, atom1, atom3, coordinates)
-                ba2 = bond_angle(atom2, atom1, atom3, coordinates2)
+                ba2 = bond_angle(atom5, atom4, atom6, coordinates2)
                 print(f"The bond angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}] and {coordinates[atom3 - 1][0]}[{atom3}] of conformer 1 is {round(ba, 1)}°.")
-                print(f"The bond angle formed by {coordinates2[atom1 - 1][0]}[{atom1}], {coordinates2[atom2 - 1][0]}[{atom2}] and {coordinates2[atom3 - 1][0]}[{atom3}] of conformer 2 is {round(ba2, 1)}°.")
+                print(f"The bond angle formed by {coordinates2[atom4 - 1][0]}[{atom4}], {coordinates2[atom5 - 1][0]}[{atom5}] and {coordinates2[atom6 - 1][0]}[{atom6}] of conformer 2 is {round(ba2, 1)}°.")
                 print(f"Difference in bond angle between the two conformers = {round(abs(ba - ba2), 1)}°")
             else:
-                print(f"{coordinates2[atom1 - 1][0]}[{atom1}] and {coordinates2[atom3 - 1][0]}[{atom2}] are not connected to {coordinates2[atom2 - 1][0]}[{atom3}] in one or both of the conformers.")
-        elif len(property2.split()) == 4: #compare dihedral angle
-            atom1, atom2, atom3, atom4 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2]), int(property2.split()[3])
-            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates) or atom1 > len(coordinates2) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates2) or len(set([atom1, atom2, atom3, atom4])) !=4:
-                print(f"ERROR IN INPUT! Atom {atom1} or atom {atom2} or atom {atom3} or atom {atom4} or a few of them not in one or both of the conformer. PLEASE TRY AGAIN..")
+                print("The atoms are not connected in one or both of the conformers.")
+        elif len(property2.split()) == 4 and len(property3.split()) == 4: #compare dihedral angle
+            atom1, atom2, atom3, atom4, atom5, atom6, atom7, atom8 = int(property2.split()[0]), int(property2.split()[1]), int(property2.split()[2]), int(property2.split()[3]), int(property3.split()[0]), int(property3.split()[1]), int(property3.split()[2]), int(property3.split()[3])
+            if atom1 > len(coordinates) or atom2 > len(coordinates) or atom3 > len(coordinates) or atom4 > len(coordinates) or atom5 > len(coordinates2) or atom6 > len(coordinates) or atom7 > len(coordinates) or atom8 > len(coordinates2) or len(set([atom1, atom2, atom3, atom4])) != 4 or len(set([atom5, atom6, atom7, atom8])) != 4:
+                print(f"ERROR IN INPUT! PLEASE TRY AGAIN..")
             else: 
                 da = dihedral_angle(atom1, atom2, atom3, atom4, coordinates)
-                da2 = dihedral_angle(atom1, atom2, atom3, atom4, coordinates2)
+                da2 = dihedral_angle(atom5, atom6, atom7, atom8, coordinates2)
                 print(f"The dihedral angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}], {coordinates[atom3 - 1][0]}[{atom3}] and {coordinates[atom4 - 1][0]}[{atom4}] of conformer 1 is {round(da)}°.")
-                print(f"The dihedral angle formed by {coordinates2[atom1 - 1][0]}[{atom1}], {coordinates2[atom2 - 1][0]}[{atom2}], {coordinates2[atom3 - 1][0]}[{atom3}] and {coordinates2[atom4 - 1][0]}[{atom4}] of conformer 2 is {round(da2)}°.")
+                print(f"The dihedral angle formed by {coordinates2[atom5 - 1][0]}[{atom5}], {coordinates2[atom6 - 1][0]}[{atom6}], {coordinates2[atom7 - 1][0]}[{atom7}] and {coordinates2[atom8 - 1][0]}[{atom8}] of conformer 2 is {round(da2)}°.")
                 print(f"Difference in dihedral angle between the two conformers = {round(abs(da - da2))}°")
         else:
             print("ERROR IN INPUT! DO YOU WANT TO EXIT?")
