@@ -1,6 +1,6 @@
 import re
 import math
-import os
+import os  
 
 def extract_coordinates(file_path):
     coordinates = []
@@ -151,7 +151,10 @@ while answer == 1:
                 bl2 = bond_length(atom3, atom4, coordinates2)
                 print(f"The bond length between {coordinates[atom1 - 1][0]}[{atom1}] and {coordinates[atom2 - 1][0]}[{atom2}] of conformer 1 is {round(bl, 2)}Å.")
                 print(f"The bond length between {coordinates2[atom3 - 1][0]}[{atom3}] and {coordinates2[atom4 - 1][0]}[{atom4}] of conformer 2 is {round(bl2, 2)}Å.")
-                print(f"Difference in bond length between the two conformers = {round(abs(bl - bl2), 2)}Å")
+                if abs(bl - bl2) > 0.05:
+                    print(f"Difference in bond length between the two conformers = {round(abs(bl - bl2), 2)}Å.")
+                else:
+                    print("No significant difference in bond length.")
             else:
                 print("The atoms are not connected in one or both of the conformers.")
         elif len(property2.split()) == 3 and len(property3.split()) == 3: #compare bond angle
@@ -163,7 +166,10 @@ while answer == 1:
                 ba2 = bond_angle(atom5, atom4, atom6, coordinates2)
                 print(f"The bond angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}] and {coordinates[atom3 - 1][0]}[{atom3}] of conformer 1 is {round(ba, 1)}°.")
                 print(f"The bond angle formed by {coordinates2[atom4 - 1][0]}[{atom4}], {coordinates2[atom5 - 1][0]}[{atom5}] and {coordinates2[atom6 - 1][0]}[{atom6}] of conformer 2 is {round(ba2, 1)}°.")
-                print(f"Difference in bond angle between the two conformers = {round(abs(ba - ba2), 1)}°")
+                if abs(ba - ba2) > 1:
+                    print(f"Difference in bond angle between the two conformers = {round(abs(ba - ba2), 1)}°.")
+                else:
+                    print("No significant difference in bond angle.")
             else:
                 print("The atoms are not connected in one or both of the conformers.")
         elif len(property2.split()) == 4 and len(property3.split()) == 4: #compare dihedral angle
@@ -175,7 +181,10 @@ while answer == 1:
                 da2 = dihedral_angle(atom5, atom6, atom7, atom8, coordinates2)
                 print(f"The dihedral angle formed by {coordinates[atom1 - 1][0]}[{atom1}], {coordinates[atom2 - 1][0]}[{atom2}], {coordinates[atom3 - 1][0]}[{atom3}] and {coordinates[atom4 - 1][0]}[{atom4}] of conformer 1 is {round(da)}°.")
                 print(f"The dihedral angle formed by {coordinates2[atom5 - 1][0]}[{atom5}], {coordinates2[atom6 - 1][0]}[{atom6}], {coordinates2[atom7 - 1][0]}[{atom7}] and {coordinates2[atom8 - 1][0]}[{atom8}] of conformer 2 is {round(da2)}°.")
-                print(f"Difference in dihedral angle between the two conformers = {round(abs(da - da2))}°")
+                if abs(da - da2) > 5:
+                    print(f"Difference in dihedral angle between the two conformers = {round(abs(da - da2))}°.")
+                else:
+                    print("No significant difference in dihedral angle.")
         else:
             print("ERROR IN INPUT! DO YOU WANT TO EXIT?")
     else:
