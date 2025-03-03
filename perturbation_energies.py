@@ -17,7 +17,7 @@ def extract_energies(file_path, output_file):
         if inside_section and end_pattern in line:
             inside_section = False
             break
-        if inside_section:
+        if inside_section and "RY" not in line and "CR" not in line:
             with open(output_file, 'a') as out_file:
                 out_file.writelines(line)
 
