@@ -96,10 +96,10 @@ def interaction_energies(input_file, output_file, orbitals):
                 for k1, v1, in orbitals1.items():
                     if "LP" in line and k == data[0] and k1 == data[6]:
                         with open(output_file, 'a', encoding = "utf-8") as outfile:
-                            outfile.writelines(f"{k} {v} ({data[4]}[{data[5]}]) -> {k1} {v1} ({data[9]}[{data[10].replace("-", "")}]-{data[11]}[{data[12]}]) => {data[13]} \n")
+                            outfile.writelines(f"{k} {v} ({data[4]}[{data[5]}]) -> {k1} {v1} ({data[9]}[{data[10].replace("-", "")}]-{data[11]}[{data[12]}]) => {data[13]} kcal/mol \n")
                     if "BD" in line and k == data[0] and k1 == data[8]:
                         with open(output_file, 'a', encoding = "utf-8") as outfile:
-                            outfile.writelines(f"{k} {v} ({data[4]}[{data[5].replace("-", "")}]-{data[6]}[{data[7]}]) -> {k1} {v1} ({data[11]}[{data[12].replace("-", "")}]-{data[13]}[{data[14]}]) => {data[15]} \n")
+                            outfile.writelines(f"{k} {v} ({data[4]}[{data[5].replace("-", "")}]-{data[6]}[{data[7]}]) -> {k1} {v1} ({data[11]}[{data[12].replace("-", "")}]-{data[13]}[{data[14]}]) => {data[15]} kcal/mol \n")
                 
 file_path = input("Enter the log file path: ").strip()
 if not os.path.exists(file_path):
