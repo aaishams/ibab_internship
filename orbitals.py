@@ -24,17 +24,13 @@ def orbital_type(output_file):
     orbitals = {}
     current_bond = ""
     for line in content:
-        if "BD" in line or "BD*" in line or "LP" in line:
+        if "BD" in line or "LP" in line:
             data = line.split()
             bond_type = data[2]
             if "LP" in line:
                 orbitals[f"{data[0]}"] = "n"
-            elif "BD " in line:
-                bond_key = f"{data[0]} {data[5]}[{data[6].replace("-", "")}]-{data[7]}[{data[8]}]"
-                current_bond = bond_key
-                orbitals[current_bond] = bond_type
-            elif "BD*" in line:
-                bond_key = f"{data[0]} {data[4]}[{data[5].replace("-", "")}]-{data[6]}[{data[7]}]"
+            elif "BD" in line:
+                bond_key = f"{data[0]}"
                 current_bond = bond_key
                 orbitals[current_bond] = bond_type
         elif current_bond and "p" in line:
@@ -52,10 +48,7 @@ def orbital_type(output_file):
                     orbitals[current_bond] = "π"
                 elif p_contribution < 95:
                     orbitals[current_bond] = "σ"
-    modified_orbitals = {}
-    for k, v in orbitals.items():
-        modified_orbitals[k.split()[0]] = v
-    return modified_orbitals
+    return orbitals
 
 def extract_energies(file_path, output_file):
     with open(file_path, 'r') as file:
