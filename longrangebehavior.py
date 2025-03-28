@@ -19,31 +19,33 @@ def check_atom_repeats(line):
     else:
         return False
     
-def bfs_bond_distance(connectivity, start, target, flag): # Breadth-First Search (BFS) algorithm for graphs
-    queue = [(start, 0)] # list to store atoms and the number of bonds (depth)
-    visited = set() # initialize set to store visited atoms
-    while queue: # process elements in queue until its empty
-        current, depth = queue.pop(0) # current is the current atom (start); depth accounts for the number of bonds; pop(0) pops the 0th element of the list and assigns the value to the variable
-        visited.add(current) # otherwise, the current atom is added to the visited set
-        if current == target: # if the target atom is reached and depth >= 3, it returns true, else false
-            if flag == 4:
-                return depth >= 4
-            if flag == 5:
-                return depth >= 5  
-        for neighbor in connectivity.get(current, []): # for getting the list of connected atoms of the current atom from connectivity data
+def bfs_bond_distance(connectivity, start, target): # Breadth-First Search (BFS) algorithm for graphs
+    if not isinstance(start, list):
+        queue = [(start, 0)]
+    else:
+        queue = []
+        for s in start:
+            queue.append((s,0))
+    visited = set() 
+    while queue: 
+        current, depth = queue.pop(0) 
+        visited.add(current)
+        if current in target: 
+            return depth >= 3
+        for neighbor in connectivity.get(current, []): 
             if neighbor not in visited: 
                 queue.append((neighbor, depth + 1))
-    return False #default return false
+    return False
 
 def check_bond_distance(connectivity, line):
     numbers = re.findall(r'\[(\d+)\]', line)
     if 'n' in line and len(numbers) == 3:
         lone, atom1, atom2 = numbers[0], numbers[1], numbers[2]
-        return bfs_bond_distance(connectivity, lone, atom1, flag = 4) or bfs_bond_distance(connectivity, lone, atom2, flag = 4)
+        return bfs_bond_distance(connectivity, lone, [atom1, atom2])
     if 'n' not in line and len(numbers) == 4:
         atom1, atom2, atom3, atom4 = numbers[0], numbers[1], numbers[2], numbers[3]
-        return bfs_bond_distance(connectivity, atom1, atom3, flag = 5) or bfs_bond_distance(connectivity, atom1, atom4, flag = 5) or bfs_bond_distance(connectivity, atom2, atom3, flag = 5) or bfs_bond_distance(connectivity, atom2, atom4, flag = 5)
-
+        return bfs_bond_distance(connectivity, [atom1, atom2], [atom3, atom4])
+    
 def check_long_range(connectivity, interaction_energies, long_range_behavior):
     with open(interaction_energies, 'r') as file:
         content = file.readlines()
