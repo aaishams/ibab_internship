@@ -5,7 +5,7 @@ psi_values <- c(sqrt(2 / L) * sin(n * pi * x_values / L))
 psi_square_values <- c((2 / L) * (sin(n * pi * x_values / L)) ^ 2)
 
 plot(x_values, psi_values, type = "l", ylim = c(0, 2), 
-     xlab = "x", ylab = "Function", main = "Plot for n = 1")
+     xlab = "x", ylab = "Function", main = "Plot for n = 100")
 lines(x_values, psi_square_values, col = "blue")
 
 legend(NULL, legend = legend("topright", 
