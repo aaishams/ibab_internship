@@ -86,7 +86,8 @@ def dihedral_angle(atom1, atom2, atom3, atom4, coordinates):
     dihedral_angle = math.acos(dot_pdt / (mag123 * mag234))
     if cross_pdt[2] > 0: # cross_pdt[2] is the z-component; > 0 => clockwise => -ve dihedral angle, < 0 => anticlockwise => +ve dihedral angle
         dihedral_angle = -dihedral_angle
-    return math.degrees(dihedral_angle)
+        dihedral_angle = 360 + math.degrees(dihedral_angle)
+    return dihedral_angle
 
 print("Hello! Here is a tool to find and compare the bond lengths, bond angles and dihedral angles of any molecule..")
 file_path = input("Enter the file path (.log): ").strip()
