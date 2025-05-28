@@ -1,4 +1,4 @@
-n <- 2
+n <- 100
 L <- 1
 x_values <- seq(0, L, length.out = 1000)
 psi_values <- c(sqrt(2 / L) * sin(n * pi * x_values / L))
